@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Canvas, FabricImage } from "fabric";
 import tshirtImg from "../../public/images/background_tshirt.png";
 import bgImage1 from "../../public/images/bgImage1.jpg";
@@ -20,6 +20,7 @@ export default function TshirtCanvas() {
   const tshirtRef = useRef<FabricImage | null>(null);
   const fabricCanvasRef = useRef<Canvas | null>(null);
   const bgImageRef = useRef<FabricImage | null>(null);
+  const [customColor, setCustomColor] = useState("#ffffff");
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -117,12 +118,28 @@ export default function TshirtCanvas() {
       <div className="w-[90vw] lg:w-[50%] h-fit lg:h-full flex items-center justify-center overflow-x-hidden max-lg:mt-[50px]">
         <canvas ref={canvasRef} width={500} height={500} className="w-full h-fit lg:h-full" />
       </div>
-      <div className="flex flex-col flex-wrap gap-4 w-full lg:w-[50%] items-center justify-center bg-amber-300 h-full p-4">
+      <div className="flex flex-col flex-wrap gap-4 w-full lg:w-[50%] items-center justify-center bg-amber-300 h-full p-4 relative">
         <div className="flex gap-2">
           <button onClick={() => changeColor("#f02c37")} className="px-4 py-2 bg-red-500 text-white w-[10vw] h-[10vw] rounded-4xl cursor-pointer">Red</button>
           <button onClick={() => changeColor("#4a7fff")} className="px-4 py-2 bg-blue-500 text-white w-[10vw] h-[10vw] rounded-4xl cursor-pointer">Blue</button>
           <button onClick={() => changeColor("#40c950")} className="px-4 py-2 bg-green-500 text-white w-[10vw] h-[10vw] rounded-4xl cursor-pointer">Green</button>
-          <button onClick={() => changeColor("#f0b100")} className="px-4 py-2 bg-yellow-500 text-white w-[10vw] h-[10vw] rounded-4xl cursor-pointer">Yellow</button>
+<label className="relative w-[10vw] h-[10vw] rounded-4xl cursor-pointer overflow-hidden">
+  <input
+    type="color"
+    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+    onChange={(e) => {
+      const color = e.target.value;
+      setCustomColor(color);   // div'i boyamak için
+      changeColor(color);      // canvas rengini değiştirmek için
+    }}
+  />
+  <div
+    className="w-full h-full rounded-4xl"
+    style={{ backgroundColor: customColor }}
+  ></div>
+</label>
+
+      {/* <button onClick={() => changeColor("#f0b100")} className="px-4 py-2 bg-yellow-500 text-white w-[10vw] h-[10vw] rounded-4xl cursor-pointer">Yellow</button> */}
         </div>
         <div className="flex gap-2">
           <button onClick={() => changeBackgroundImage(bgImage1.src)} className="w-[10vw] h-[10vw] rounded-4xl cursor-pointer"><CustomImage src={bgImage1.src} /></button>
